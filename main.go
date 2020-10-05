@@ -76,7 +76,40 @@ func antysymmetrical(r [5][5]int) bool {
 	return true
 }
 
-// x4 x5
+func transit(r1, r2 [5][5]int) bool {
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 5; j++ {
+			if r1[i][j] == 1 {
+				if r1[i][j] != r2[i][j] {
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+
+// func acyclic(r1 [5][5]int) bool {
+
+// 	return true
+// }
+
+func connected(r [5][5]int) bool {
+	for i := 0; i < 5; i++ {
+		flag := false
+		for j := 0; j < 5; j++ {
+			if r[j][i] == 1 {
+				flag = true
+				break
+			}
+		}
+		if !flag {
+			return false
+		}
+	}
+	return true
+}
+
 func main() {
 	r := [5][5]int{
 		{0, 0, 1, 1, 0},
@@ -100,6 +133,21 @@ func main() {
 
 	fmt.Println("Aнтиcиметричність")
 	fmt.Println(antysymmetrical(r))
+
+	fmt.Println("Транзитивність")
+	fmt.Println(transit(comp(r, r), r))
+
+	// fmt.Println("Ациклічність")
+	// fmt.Println(acyclic(r))
+
+	fmt.Println("Негативна транзитивність")
+	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)))
+
+	fmt.Println("Сильна транзитивність")
+	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)) && transit(comp(r, r), r))
+
+	fmt.Println("Зв'язність")
+	fmt.Println(connected(r))
 }
 
 func draw(r [5][5]int, filename string) {
@@ -196,48 +244,29 @@ func drawDirections(r [5][5]int, nodes []node, dc *gg.Context) {
 	}
 }
 
-func dop(r1, r2 [5][5]int) ([5][5]int, [5][5]int) {
-	fmt.Println("Доповнення (r1,r2)")
+func dop(r [5][5]int) [5][5]int {
+	// fmt.Println("Доповнення (r1,r2)")
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
-			if r1[i][j] == 1 {
-				r1[i][j] = 0
+			if r[i][j] == 1 {
+				r[i][j] = 0
 			} else {
-				r1[i][j] = 1
+				r[i][j] = 1
 			}
 		}
 	}
 
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			if r2[i][j] == 1 {
-				r2[i][j] = 0
-			} else {
-				r2[i][j] = 1
-			}
-		}
-	}
-
-	for _, a := range r1 {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
-
-	fmt.Println()
-
-	for _, a := range r2 {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
-	return r1, r2
+	// for _, a := range r1 {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
+	return r
 }
 
 func per(r1, r2 [5][5]int) [5][5]int {
-	fmt.Println("Перетин")
+	// fmt.Println("Перетин")
 
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
@@ -248,19 +277,19 @@ func per(r1, r2 [5][5]int) [5][5]int {
 		}
 	}
 
-	fmt.Println()
+	// fmt.Println()
 
-	for _, a := range r1 {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, a := range r1 {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 	return r1
 }
 
 func ob(r1, r2 [5][5]int) [5][5]int {
-	fmt.Println("Об'єднання")
+	// fmt.Println("Об'єднання")
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
 			if r1[i][j] == 1 || r2[i][j] == 1 {
@@ -269,19 +298,19 @@ func ob(r1, r2 [5][5]int) [5][5]int {
 		}
 	}
 
-	fmt.Println()
+	// fmt.Println()
 
-	for _, a := range r1 {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, a := range r1 {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 	return r1
 }
 
 func riz(r1, r2 [5][5]int) [5][5]int {
-	fmt.Println("\nРізниця")
+	// fmt.Println("\nРізниця")
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
 			if r2[i][j] == 1 {
@@ -290,21 +319,21 @@ func riz(r1, r2 [5][5]int) [5][5]int {
 		}
 	}
 
-	fmt.Println()
+	// fmt.Println()
 
-	for _, a := range r1 {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, a := range r1 {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 	return r1
 }
 
 func ober(r1, r2 [5][5]int) {
-	fmt.Println("\nОбернена")
+	// fmt.Println("\nОбернена")
 
-	fmt.Println("r1:")
+	// fmt.Println("r1:")
 
 	c := [5][5]int{}
 	for i := 0; i < 5; i++ {
@@ -312,27 +341,27 @@ func ober(r1, r2 [5][5]int) {
 			c[i][j] = r1[j][i]
 		}
 	}
-	for _, a := range c {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, a := range c {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 
 	draw(c, "ober_r1")
 
-	fmt.Println("r2:")
+	// fmt.Println("r2:")
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
 			c[i][j] = r2[j][i]
 		}
 	}
-	for _, a := range c {
-		for _, v := range a {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, a := range c {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 	draw(c, "ober_r2")
 }
 
@@ -360,26 +389,26 @@ func zvyg(r1, r2 [5][5]int) {
 		}
 	}
 	draw(r2, "zvygennya_r2")
-	fmt.Println("\n звуження r1")
+	// fmt.Println("\n звуження r1")
 
-	for _, b := range r1 {
-		for _, v := range b {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, b := range r1 {
+	// 	for _, v := range b {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 
-	fmt.Println("\n звуження r2")
-	for _, b := range r2 {
-		for _, v := range b {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// fmt.Println("\n звуження r2")
+	// for _, b := range r2 {
+	// 	for _, v := range b {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 }
 
-func comp(r1, r2 [5][5]int) {
-	fmt.Println("\nКомпозиція")
+func comp(r1, r2 [5][5]int) [5][5]int {
+	// fmt.Println("\nКомпозиція")
 
 	a := [5][5]int{}
 	for i := 0; i < 5; i++ {
@@ -394,11 +423,12 @@ func comp(r1, r2 [5][5]int) {
 		}
 	}
 
-	for _, b := range a {
-		for _, v := range b {
-			fmt.Print(v, " ")
-		}
-		fmt.Println()
-	}
+	// for _, b := range a {
+	// 	for _, v := range b {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
 	draw(a, "compoz")
+	return a
 }
