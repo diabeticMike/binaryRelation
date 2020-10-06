@@ -89,10 +89,18 @@ func transit(r1, r2 [5][5]int) bool {
 	return true
 }
 
-// func acyclic(r1 [5][5]int) bool {
-
-// 	return true
-// }
+func acyclic(r1, r2 [5][5]int) bool {
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 5; j++ {
+			if r1[i][j] == 1 {
+				if r1[i][j] == r2[i][j] {
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
 
 func connected(r [5][5]int) bool {
 	for i := 0; i < 5; i++ {
@@ -137,8 +145,8 @@ func main() {
 	fmt.Println("Транзитивність")
 	fmt.Println(transit(comp(r, r), r))
 
-	// fmt.Println("Ациклічність")
-	// fmt.Println(acyclic(r))
+	fmt.Println("Ациклічність")
+	fmt.Println(acyclic(comp(r, r), r))
 
 	fmt.Println("Негативна транзитивність")
 	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)))
@@ -148,6 +156,8 @@ func main() {
 
 	fmt.Println("Зв'язність")
 	fmt.Println(connected(r))
+
+	draw(r, "r")
 }
 
 func draw(r [5][5]int, filename string) {
