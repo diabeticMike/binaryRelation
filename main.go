@@ -119,6 +119,15 @@ func main() {
 		{0, 0, 1, 1, 0}}
 	draw(r, "r")
 
+	fmt.Println("Відношення еквівалентності")
+	fmt.Println(reflecsive(r) && symmetrical(r) && transit(comp(r, r), r))
+
+	fmt.Println("Відношення нестрогого порядку")
+	fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
+
+	fmt.Println("Відношення строгого порядку")
+	fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
+
 	fmt.Println("Рефлексивність")
 	fmt.Println(reflecsive(r))
 
@@ -137,8 +146,8 @@ func main() {
 	fmt.Println("Транзитивність")
 	fmt.Println(transit(comp(r, r), r))
 
-	// fmt.Println("Ациклічність")
-	// fmt.Println(acyclic(r))
+	fmt.Println("Ациклічність")
+	fmt.Println(!transit(comp(r, r), r))
 
 	fmt.Println("Негативна транзитивність")
 	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)))
@@ -148,6 +157,7 @@ func main() {
 
 	fmt.Println("Зв'язність")
 	fmt.Println(connected(r))
+
 }
 
 func draw(r [5][5]int, filename string) {
