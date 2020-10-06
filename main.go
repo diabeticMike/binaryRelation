@@ -429,6 +429,6 @@ func comp(r1, r2 [5][5]int) [5][5]int {
 	// 	}
 	// 	fmt.Println()
 	// }
-	draw(a, "compoz")
+	// draw(a, "compoz")
 	return a
 }
