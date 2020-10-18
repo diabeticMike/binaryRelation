@@ -118,6 +118,66 @@ func connected(r [5][5]int) bool {
 	return true
 }
 
+// Maximum
+func findMax(r [5][5]int) []int {
+	res := []int{}
+	for i := 0; i < 5; i++ {
+		if r[i] == [5]int{1, 1, 1, 1, 1} {
+			res = append(res, i)
+		}
+	}
+
+	if len(res) == 0 {
+		return nil
+	}
+	return res
+}
+
+// Minimum
+func findMin(r [5][5]int) []int {
+	res := []int{}
+	for i := 0; i < 5; i++ {
+		if r[:][i] == [5]int{1, 1, 1, 1, 1} {
+			res = append(res, i)
+		}
+	}
+
+	if len(res) == 0 {
+		return nil
+	}
+	return res
+}
+
+// Minoranta
+func findMinor(r [5][5]int) []int {
+	res := []int{}
+	for i := 0; i < 5; i++ {
+		if r[i] == [5]int{0, 0, 0, 0, 0} {
+			res = append(res, i)
+		}
+	}
+
+	if len(res) == 0 {
+		return nil
+	}
+	return res
+}
+
+// Majoranta
+func findMajor(r [5][5]int) []int {
+	res := []int{}
+	for i := 0; i < 5; i++ {
+		if r[:][i] == [5]int{0, 0, 0, 0, 0} {
+			res = append(res, i)
+		}
+	}
+
+	if len(res) == 0 {
+		return nil
+	}
+	return res
+}
+
 func main() {
 	r := [5][5]int{
 		{0, 0, 1, 1, 0},
@@ -127,44 +187,94 @@ func main() {
 		{0, 0, 1, 1, 0}}
 	draw(r, "r")
 
-	fmt.Println("Відношення еквівалентності")
-	fmt.Println(reflecsive(r) && symmetrical(r) && transit(comp(r, r), r))
+	// fmt.Print("Відношення еквівалентності ")
+	// fmt.Println(reflecsive(r) && symmetrical(r) && transit(comp(r, r), r))
 
-	fmt.Println("Відношення нестрогого порядку")
-	fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
+	// fmt.Print("Відношення нестрогого порядку ")
+	// fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
 
-	fmt.Println("Відношення строгого порядку")
-	fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
+	// fmt.Print("Відношення строгого порядку ")
+	// fmt.Println(reflecsive(r) && asymmetrical(r) && transit(comp(r, r), r))
 
-	fmt.Println("Рефлексивність")
-	fmt.Println(reflecsive(r))
+	// fmt.Print("Відношення лінійного порядку ")
+	// fmt.Println(reflecsive(r) && antysymmetrical(r) && transit(comp(r, r), r))
 
-	fmt.Println("Антирефлексивність")
-	fmt.Println(antyreflecsive(r))
+	// fmt.Print("Відношення домінування ")
+	// fmt.Println(antyreflecsive(r) && asymmetrical(r))
 
-	fmt.Println("Симетричність")
-	fmt.Println(symmetrical(r))
+	// fmt.Print("Відношення подібності ")
+	// fmt.Println(reflecsive(r) && symmetrical(r))
 
-	fmt.Println("Acиметричність")
-	fmt.Println(asymmetrical(r))
+	fmt.Print("Відношення еквівалентності ")
+	c := comp(r, ober(r))
+	for _, a := range c {
+		for _, v := range a {
+			fmt.Print(v, " ")
+		}
+		fmt.Println()
+	}
+	draw(c, "equivalent")
+	fmt.Print("Відношення еквівалентності ")
+	fmt.Println(reflecsive(c) && symmetrical(c) && transit(comp(c, c), c))
 
-	fmt.Println("Aнтиcиметричність")
-	fmt.Println(antysymmetrical(r))
+	// fmt.Print("Відношення домінування ")
+	// c := comp(r, ober(r))
+	// for _, a := range c {
+	// 	for _, v := range a {
+	// 		fmt.Print(v, " ")
+	// 	}
+	// 	fmt.Println()
+	// }
+	// fmt.Print("Відношення домінування ")
+	// fmt.Println(antyreflecsive(c) && asymmetrical(c))
 
-	fmt.Println("Транзитивність")
-	fmt.Println(transit(comp(r, r), r))
+	fmt.Print("Відношення толерантності ")
+	c = ob(ob(r, ober(r)), per(r, ober(r)))
+	for _, a := range c {
+		for _, v := range a {
+			fmt.Print(v, " ")
+		}
+		fmt.Println()
+	}
+	draw(c, "tolerant")
 
-	fmt.Println("Ациклічність")
-	fmt.Println(acyclic(comp(r, r), r))
+	fmt.Print("Відношення строгої переваги ")
+	c = riz(r, ober(r))
+	for _, a := range c {
+		for _, v := range a {
+			fmt.Print(v, " ")
+		}
+		fmt.Println()
+	}
+	draw(c, "strong_advandage")
 
-	fmt.Println("Негативна транзитивність")
-	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)))
+	fmt.Print("Максимум ")
+	if m := findMax(r); m != nil {
+		fmt.Println(m)
+	} else {
+		fmt.Println("відсутній")
+	}
 
-	fmt.Println("Сильна транзитивність")
-	fmt.Println(transit(comp(dop(r), dop(r)), dop(r)) && transit(comp(r, r), r))
+	fmt.Print("Мінімум ")
+	if m := findMin(r); m != nil {
+		fmt.Println(m)
+	} else {
+		fmt.Println("відсутній")
+	}
 
-	fmt.Println("Зв'язність")
-	fmt.Println(connected(r))
+	fmt.Print("Мажоранта ")
+	if m := findMajor(r); m != nil {
+		fmt.Println(m)
+	} else {
+		fmt.Println("відсутня")
+	}
+
+	fmt.Print("Міноранта ")
+	if m := findMinor(r); m != nil {
+		fmt.Println(m)
+	} else {
+		fmt.Println("відсутня")
+	}
 
 	draw(r, "r")
 }
@@ -349,7 +459,7 @@ func riz(r1, r2 [5][5]int) [5][5]int {
 	return r1
 }
 
-func ober(r1, r2 [5][5]int) {
+func ober(r1 [5][5]int) [5][5]int {
 	// fmt.Println("\nОбернена")
 
 	// fmt.Println("r1:")
@@ -368,20 +478,7 @@ func ober(r1, r2 [5][5]int) {
 	// }
 
 	draw(c, "ober_r1")
-
-	// fmt.Println("r2:")
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			c[i][j] = r2[j][i]
-		}
-	}
-	// for _, a := range c {
-	// 	for _, v := range a {
-	// 		fmt.Print(v, " ")
-	// 	}
-	// 	fmt.Println()
-	// }
-	draw(c, "ober_r2")
+	return c
 }
 
 func zvyg(r1, r2 [5][5]int) {
