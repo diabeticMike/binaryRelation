@@ -310,11 +310,11 @@ func drawNodes(r [5][5]int, dc *gg.Context) {
 	for k, v := range nodes {
 		if r[k][k] != 1 {
 			dc.DrawCircle(v.x, v.y, 50)
-			dc.SetRGB(0, 0, 0)
+			dc.SetRGB255(0, 0, 0)
 			dc.Fill()
 		} else {
 			dc.DrawCircle(v.x, v.y, 50)
-			dc.SetRGB(7, 45, 239)
+			dc.SetRGB255(7, 45, 239)
 			dc.Fill()
 		}
 
