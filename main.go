@@ -113,9 +113,9 @@ func main() {
 		}
 	}
 
-	p := path(C, m, 1, 3, n)
+	p := path(C, m, 1, 2, n)
 	draw(m, p, "graph")
-	for i := 0; i < len(p); i++{
+	for i := 0; i < len(p); i++ {
 		p[i]++
 	}
 	fmt.Println(p)
@@ -220,27 +220,30 @@ func check(nodes []node, x, y float64) bool {
 func drawDirections(r [][]int, nodes []node, dc *gg.Context) {
 	for i := 0; i < 6; i++ {
 		for j := 0; j < 6; j++ {
-			if r[i][j] == 100 || r[i][j] == 0 {
+			if r[i][j] == 100 {
 				continue
+			}
+			if r[i][j] == 0 {
+				break
 			}
 
 			dc.SetRGBA(226, 106, 106, 1)
 			dc.SetLineWidth(6)
 			dc.DrawLine(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y)
 			dc.Stroke()
-			x := (nodes[i].x + nodes[j].x) / 2
-			y := (nodes[i].y + nodes[j].y) / 2
+			// x := (nodes[i].x + nodes[j].x) / 2
+			// y := (nodes[i].y + nodes[j].y) / 2
 
-			x = (x + nodes[j].x) / 2
-			y = (y + nodes[j].y) / 2
+			// x = (x + nodes[j].x) / 2
+			// y = (y + nodes[j].y) / 2
 
-			x = (x + nodes[j].x) / 2
-			y = (y + nodes[j].y) / 2
+			// x = (x + nodes[j].x) / 2
+			// y = (y + nodes[j].y) / 2
 
-			dc.SetRGBA(226, 106, 106, 1)
-			dc.SetLineWidth(15)
-			dc.DrawLine(x, y, nodes[j].x, nodes[j].y)
-			dc.Stroke()
+			// dc.SetRGBA(226, 106, 106, 1)
+			// dc.SetLineWidth(15)
+			// dc.DrawLine(x, y, nodes[j].x, nodes[j].y)
+			// dc.Stroke()
 		}
 	}
 }
