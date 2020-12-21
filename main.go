@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"math/rand"
-	"time"
 
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
@@ -70,6 +68,7 @@ func path(copt, m [][]int, a, b, n int) []int {
 			return res
 		}
 	}
+	res = append(res, b)
 	return res
 }
 
@@ -91,15 +90,28 @@ func main() {
 	// 	{100, 3, 4, 2, 0, 100},
 	// 	{100, 100, 1, 100, 4, 0}}
 	m := [][]int{
-		{0, 100, 4, 100, 100, 2},
-		{100, 0, 100, 1, 2, 100},
-		{4, 100, 0, 2, 4, 3},
-		{100, 1, 2, 0, 3, 3},
-		{100, 2, 4, 3, 0, 100},
-		{2, 100, 3, 3, 100, 0},
+		{0, 10, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100},   //1
+		{10, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100},   //2
+		{100, 10, 0, 10, 3, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100},     //3
+		{10, 100, 10, 0, 100, 100, 100, 8, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100},     //4
+		{100, 100, 3, 100, 0, 8, 100, 100, 7, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100},       //5
+		{100, 100, 100, 100, 6, 0, 1, 100, 100, 7, 100, 100, 100, 100, 100, 100, 100, 100, 100},       //6
+		{100, 100, 100, 100, 100, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, //7
+		{100, 100, 100, 9, 100, 100, 4, 0, 100, 100, 100, 10, 100, 100, 100, 100, 100, 100, 100},      //8
+		{100, 100, 100, 100, 7, 100, 100, 100, 0, 10, 100, 100, 100, 100, 14, 100, 100, 100, 100},     //9
+		{100, 100, 100, 100, 100, 5, 100, 100, 10, 0, 3, 100, 100, 100, 100, 100, 100, 100, 100},      //10
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 3, 0, 3, 4, 100, 100, 100, 100, 100, 100},       //11
+		{100, 100, 100, 100, 100, 100, 100, 9, 100, 100, 3, 0, 100, 100, 100, 100, 100, 100, 18},      //12
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 4, 100, 0, 4, 100, 100, 100, 100, 100},     //13
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 4, 0, 13, 10, 100, 100, 100},     //14
+		{100, 100, 100, 100, 100, 100, 100, 100, 13, 100, 100, 100, 100, 13, 0, 100, 14, 100, 100},    //15
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 9, 100, 0, 13, 10, 100},     //16
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 13, 13, 0, 100, 100},   //17
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 10, 100, 0, 1},    //18
+		{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 14, 100, 100, 100, 100, 100, 1, 0},    //19
 	}
 
-	n := 6
+	n := 19
 
 	C := m
 	for {
@@ -113,7 +125,7 @@ func main() {
 		}
 	}
 
-	p := path(C, m, 1, 2, n)
+	p := path(C, m, 17, 8, n)
 	draw(m, p, "graph")
 	for i := 0; i < len(p); i++ {
 		p[i]++
@@ -164,7 +176,7 @@ func draw(r [][]int, path []int, filename string) {
 		log.Fatal(err)
 	}
 
-	face := truetype.NewFace(font, &truetype.Options{Size: 48})
+	face := truetype.NewFace(font, &truetype.Options{Size: 24})
 	dc.SetFontFace(face)
 
 	drawNodes(r, path, dc)
@@ -172,35 +184,54 @@ func draw(r [][]int, path []int, filename string) {
 }
 
 func drawNodes(r [][]int, path []int, dc *gg.Context) {
-	nodes := make([]node, 0, 6)
-	rand.Seed(time.Now().UnixNano())
-	nodes = append(nodes, node{x: float64(rand.Intn(w - 100)), y: float64(rand.Intn(h - 100))})
-	for len(nodes) < 6 {
-		for {
-			x, y := float64(rand.Intn(w-200)+100), float64(rand.Intn(h-200)+100)
-			if check(nodes, x, y) {
-				nodes = append(nodes, node{x, y})
-				break
-			}
-		}
-	}
+	nodes := make([]node, 0, 0)
+	// rand.Seed(time.Now().UnixNano())
+	// nodes = append(nodes, node{x: float64(rand.Intn(w - 100)), y: float64(rand.Intn(h - 100))})
+	// for len(nodes) < 6 {
+	// 	for {
+	// 		x, y := float64(rand.Intn(w-200)+100), float64(rand.Intn(h-200)+100)
+	// 		if check(nodes, x, y) {
+	// 			nodes = append(nodes, node{x, y})
+	// 			break
+	// 		}
+	// 	}
+	// }
+	nodes = append(nodes, node{x: 580, y: 110})
+	nodes = append(nodes, node{x: 460, y: 200})
+	nodes = append(nodes, node{x: 580, y: 330})
+	nodes = append(nodes, node{x: 700, y: 230})
+	nodes = append(nodes, node{x: 590, y: 380})
+	nodes = append(nodes, node{x: 710, y: 370})
+	nodes = append(nodes, node{x: 705, y: 350})
+	nodes = append(nodes, node{x: 780, y: 335})
+	nodes = append(nodes, node{x: 613, y: 475})
+	nodes = append(nodes, node{x: 750, y: 450})
+	nodes = append(nodes, node{x: 820, y: 470})
+	nodes = append(nodes, node{x: 880, y: 450})
+	nodes = append(nodes, node{x: 870, y: 540})
+	nodes = append(nodes, node{x: 890, y: 635})
+	nodes = append(nodes, node{x: 660, y: 690})
+	nodes = append(nodes, node{x: 925, y: 780})
+	nodes = append(nodes, node{x: 720, y: 950})
+	nodes = append(nodes, node{x: 1055, y: 670})
+	nodes = append(nodes, node{x: 1050, y: 645})
 
-	drawDirections(r, nodes, dc)
+	// drawDirections(r, nodes, dc)
 	drawPath(r, nodes, path, dc)
 
 	for k, v := range nodes {
-		if r[k][k] == 0 {
-			dc.DrawCircle(v.x, v.y, 50)
-			dc.SetRGB(0, 0, 0)
-			dc.Fill()
-		} else {
-			dc.DrawCircle(v.x, v.y, 50)
-			dc.SetRGB(7, 45, 239)
-			dc.Fill()
-		}
+		// if r[k][k] == 0 {
+		dc.DrawCircle(v.x, v.y, 15)
+		dc.SetRGB(0, 0, 0)
+		dc.Fill()
+		// } else {
+		// 	dc.DrawCircle(v.x, v.y, 20)
+		// 	dc.SetRGB(7, 45, 239)
+		// 	dc.Fill()
+		// }
 
 		dc.SetRGB(1, 1, 1)
-		dc.DrawStringAnchored(fmt.Sprint(k+1), v.x, v.y, 0.6, 0.6)
+		dc.DrawStringAnchored(fmt.Sprint(k+1), v.x, v.y, 0.5, 0.5)
 		dc.Fill()
 
 	}
@@ -220,8 +251,8 @@ func check(nodes []node, x, y float64) bool {
 }
 
 func drawDirections(r [][]int, nodes []node, dc *gg.Context) {
-	for i := 0; i < 6; i++ {
-		for j := 0; j < 6; j++ {
+	for i := 0; i < 19; i++ {
+		for j := 0; j < 19; j++ {
 			if r[i][j] == 100 {
 				continue
 			}
