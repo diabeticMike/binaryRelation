@@ -145,7 +145,7 @@ func equal(a, b []int) bool {
 	return true
 }
 
-var w, h int = 1024, 1024
+var w, h int = 2543, 1344
 
 type node struct {
 	x, y float64
@@ -153,7 +153,9 @@ type node struct {
 
 func draw(r [][]int, path []int, filename string) {
 	dc := gg.NewContext(w+100, h+100)
-	dc.DrawRectangle(0, 0, float64(w+100), float64(h+100))
+	m, _ := gg.LoadPNG("rivne.png")
+	dc.DrawImage(m, 0, 0)
+	// dc.DrawRectangle(0, 0, float64(w+100), float64(h+100))
 	dc.SetRGB(102, 0, 102)
 	dc.Fill()
 
