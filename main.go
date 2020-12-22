@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"math/rand"
-	"time"
 
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
@@ -113,7 +111,7 @@ func main() {
 		}
 	}
 
-	p := path(C, m, 1, 2, n)
+	p := path(C, m, 1, 5, n)
 	draw(m, p, "graph")
 	for i := 0; i < len(p); i++ {
 		p[i]++
@@ -155,7 +153,7 @@ func draw(r [][]int, path []int, filename string) {
 	dc := gg.NewContext(w+100, h+100)
 	m, _ := gg.LoadPNG("rivne.png")
 	dc.DrawImage(m, 0, 0)
-	// dc.DrawRectangle(0, 0, float64(w+100), float64(h+100))
+	dc.DrawRectangle(0, 0, float64(w+100), float64(h+100))
 	dc.SetRGB(102, 0, 102)
 	dc.Fill()
 
@@ -173,17 +171,23 @@ func draw(r [][]int, path []int, filename string) {
 
 func drawNodes(r [][]int, path []int, dc *gg.Context) {
 	nodes := make([]node, 0, 6)
-	rand.Seed(time.Now().UnixNano())
-	nodes = append(nodes, node{x: float64(rand.Intn(w - 100)), y: float64(rand.Intn(h - 100))})
-	for len(nodes) < 6 {
-		for {
-			x, y := float64(rand.Intn(w-200)+100), float64(rand.Intn(h-200)+100)
-			if check(nodes, x, y) {
-				nodes = append(nodes, node{x, y})
-				break
-			}
-		}
-	}
+	// rand.Seed(time.Now().UnixNano())
+	// nodes = append(nodes, node{x: float64(rand.Intn(w - 100)), y: float64(rand.Intn(h - 100))})
+	// for len(nodes) < 6 {
+	// 	for {
+	// 		x, y := float64(rand.Intn(w-200)+100), float64(rand.Intn(h-200)+100)
+	// 		if check(nodes, x, y) {
+	// 			nodes = append(nodes, node{x, y})
+	// 			break
+	// 		}
+	// 	}
+	// }
+	nodes = append(nodes, node{x: 2*400, y: 3*300})
+	nodes = append(nodes, node{x: 2*800, y: 3*300})
+	nodes = append(nodes, node{x: 2*450, y: 3*100})
+	nodes = append(nodes, node{x: 2*650, y: 3*300})
+	nodes = append(nodes, node{x: 2*700, y: 3*100})
+	nodes = append(nodes, node{x: 2*500, y: 3*300})
 
 	drawDirections(r, nodes, dc)
 	drawPath(r, nodes, path, dc)
